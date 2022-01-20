@@ -1,0 +1,54 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.department.mapper.DepartmentMapper">
+    <insert id="insert" parameterType="com.work.department.Department" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO department (name, parent_id, available, depth)
+        VALUES (#{name}, #{parentId}, 'Y', #{depth})
+    </insert>
+
+    <select id="selectOne" resultType="com.work.department.Department">
+        SELECT (id, name, parent_id)
+        FROM department
+        WHERE id = #{id}
+          AND available = 'Y'
+    </select>
+
+    <select id="selectExistLower" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM department WHERE parent_id = #{id})
+    </select>
+
+    <select id="selectAll" resultType="com.work.department.Department">
+        SELECT * (id, name, parent_id)
+        FROM department
+        WHERE available = 'Y'
+    </select>
+
+    <select id="selectDepth" resultType="Integer" parameterType="Long">
+        WITH RECURSIVE department_depth (id, parent_id, depth) AS
+                           (
+                               SELECT id,
+                                      parentId,
+                                      0 AS depth
+                               FROM department
+                               WHERE id = #{departmentId}
+
+                               UNION ALL
+
+                               SELECT department.id,
+                                      department.parent_id,
+                                      department_depth.depth + 1 AS depth
+                               FROM department
+                                        INNER JOIN department_depth
+                                                   ON department.id = department_depth.parent_id
+                           )
+        SELECT MAX(depth)
+        FROM department_depth
+    </select>
+
+    <update id="delete" keyProperty="available">
+        UPDATE department
+        SET available = 'N'
+        WHERE id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,37 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.rank.mapper.RankMapper">
+
+    <insert id="insertUser" parameterType="com.work.rank.Rank">
+        INSERT INTO user_department (user_id, department_id, user_rank, available)
+        VALUES (#{userId}, #{departmentId}, #{userRank}, 'Y')
+    </insert>
+
+
+    <update id="updateUser" parameterType="com.work.rank.Rank">
+        UPDATE user_department
+        SET user_rank = #{userRank}
+        WHERE user_id = #{userId}
+          AND department_id = #{departmentId}
+    </update>
+
+    <delete id="deleteUser">
+        UPDATE department
+        SET available = 'N'
+        WHERE user_id = #{userId}
+          AND department_id = #{departmentId}
+    </delete>
+
+    <select id="selectUsers" resultType="com.work.user.User">
+        SELECT (id, name, password)
+        FROM user
+        WHERE id IN (
+            SELECT user_id
+            FROM user_department
+            WHERE department_id = #{departmentId})
+          AND available = 'Y'
+    </select>
+</mapper>
+
+

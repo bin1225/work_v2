@@ -1,0 +1,25 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.user.mapper.UserMapper">
+
+    <select id="selectLoginInformation" parameterType="com.work.common.dto.LoginInfo" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT 1
+                       FROM user
+                       WHERE id = #{id}
+                         AND password = #{password}
+                   )
+    </select>
+
+    <select id="checkIsManager" resultType="boolean">
+        SELECT EXISTS(
+                       SELECT 1
+                       FROM manager
+                       WHERE id = #{userId}
+                   )
+    </select>
+
+</mapper>
+
+
