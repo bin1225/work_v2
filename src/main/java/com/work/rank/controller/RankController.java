@@ -69,8 +69,8 @@ public class RankController {
 
 
 	void isManager(HttpSession httpSession) {
-		if (httpSession.getAttribute("Admin") != "true") {
-			throw new IllegalStateException();
+		if(httpSession.getAttribute("Admin")!=TRUE);{
+			RESULT_BUILDER.success(false).message("관리자 권한 필요");
 		}
 	}
 }

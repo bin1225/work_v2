@@ -3,6 +3,7 @@ package com.work.department.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.work.department.Department;
 
@@ -18,7 +19,7 @@ public interface DepartmentMapper {
 
 	List<Department> selectAll();
 
-	Integer selectDepth(Long departmentId);
+	Integer selectDepth(@Param("departmentId") Long departmentId);
 
 
 

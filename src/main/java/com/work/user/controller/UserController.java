@@ -1,5 +1,8 @@
 package com.work.user.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.work.common.argumentResolver.UserInfo;
 import com.work.common.dto.Result;
 import com.work.common.dto.LoginInfo;
 import com.work.user.User;
@@ -22,14 +26,16 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping("/user/login")
-	public Result<User> login(@ModelAttribute LoginInfo loginInfo, HttpSession httpSession) {
+	public Result<User> login(@ModelAttribute LoginInfo loginInfo, HttpServletResponse response,HttpSession httpSession) {
 
 		try {
 			userService.login(loginInfo);
-			httpSession.setAttribute("Login","true");
-			httpSession.setAttribute("id",loginInfo.getId());
-			httpSession.setAttribute("Admin",userService.checkIsManager(loginInfo.getId()));
-
+			Cookie cookie = new Cookie("id",loginInfo.getId());
+			cookie.setPath("/");
+			response.addCookie(cookie);
+			if(userService.checkIsManager(loginInfo.getId())) {
+				httpSession.setAttribute("Admin","true" );
+			}
 		} catch (IllegalArgumentException e) {
 			return Result.<User>builder()
 				.success(false)
@@ -40,5 +46,15 @@ public class UserController {
 		return Result.<User>builder()
 			.success(true)
 			.build();
+	}
+
+	@GetMapping("/test/resolver")
+	public Result<User> testUserResolver(@UserInfo User user){
+		System.out.println("password = "+user.getPassword());
+		return Result.<User>builder()
+			.success(true)
+			.data(user)
+			.build();
+
 	}
 }

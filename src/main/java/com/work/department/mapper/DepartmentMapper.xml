@@ -19,7 +19,7 @@
     </select>
 
     <select id="selectAll" resultType="com.work.department.Department">
-        SELECT * (id, name, parent_id)
+        SELECT (id, name, parent_id)
         FROM department
         WHERE available = 'Y'
     </select>
@@ -28,7 +28,7 @@
         WITH RECURSIVE department_depth (id, parent_id, depth) AS
                            (
                                SELECT id,
-                                      parentId,
+                                      parent_id,
                                       0 AS depth
                                FROM department
                                WHERE id = #{departmentId}

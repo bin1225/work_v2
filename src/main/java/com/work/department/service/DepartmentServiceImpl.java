@@ -20,7 +20,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Transactional
 	public Long createDepartment(Department department) throws IllegalArgumentException {
-		int depth = selectDepth(department);
+		int depth = selectDepth(department.getParentId())+1;
 		if (depth > 4) {
 			throw new IllegalArgumentException("depth가 4보다 큽니다.");
 		}
@@ -45,8 +45,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 		departmentMapper.delete(id);
 	}
 
-	public int selectDepth(Department department) {
-		return departmentMapper.selectDepth(department.getParentId());
+	public int selectDepth(Long id) {
+		return departmentMapper.selectDepth(id);
 	}
 
 	public Department getAllDepartmentsTree() {

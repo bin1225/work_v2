@@ -26,14 +26,15 @@ public class DepartmentController {
 
 	@PostMapping("/department")
 	public Result<Department> createDepartment(@ModelAttribute Department department, HttpSession httpSession) {
-
+		System.out.println("name:"+ department.getName());
 		Result.ResultBuilder<Department> result = Result.<Department>builder().success(true);
-
+		System.out.println("create Controller");
 		if (httpSession.getAttribute("Admin") != "true") {
 			result.success(false).message("관리자 권한 필요");
 		}
-
+		System.out.println("==========check manager-------------");
 		try {
+			System.out.println("parentId = " + department.getParentId());
 			departmentService.createDepartment(department);
 		} catch (IllegalArgumentException e) {
 			result.success(false)

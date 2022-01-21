@@ -22,7 +22,7 @@ public class Department {
 	private String available;
 	private int depth;
 
-	private List<Rank> ranks;
+
 	private List<Department> children;
 
 	public Department(String name, Long parentId) {
@@ -38,10 +38,4 @@ public class Department {
 		this.children.add(department);
 	}
 
-	public void addRelation(Rank relation) {
-		if (Objects.isNull(ranks)) {
-			ranks = new ArrayList<>();
-		}
-		ranks.add(relation);
-	}
 }
