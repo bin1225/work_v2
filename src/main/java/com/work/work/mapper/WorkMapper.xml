@@ -1,0 +1,16 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.work.work.mapper.WorkMapper">
+    <insert id="insert" parameterType="com.work.work.Work" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO work (time_start, user_id)
+        VALUES (#{start}, #{userId})
+    </insert>
+
+    <update id="updateEndTime" parameterType="integer">
+        UPDATE work
+        SET time_end = now()
+        WHERE id = #{workingId}
+    </update>
+</mapper>
+

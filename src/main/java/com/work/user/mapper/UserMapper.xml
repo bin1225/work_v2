@@ -25,6 +25,7 @@
         SELECT id, name, password
         FROM user
         WHERE id = #{userId}
+          AND available = 'Y'
     </select>
 </mapper>
 
