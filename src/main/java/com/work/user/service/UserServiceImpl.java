@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
-	public boolean checkIsManager(String userId) throws IllegalStateException {
+	public boolean checkIsManager(String userId){
 		return userMapper.checkIsManager(userId);
 	}
 }

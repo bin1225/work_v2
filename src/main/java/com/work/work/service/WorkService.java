@@ -1,25 +1,17 @@
 package com.work.work.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-
+import com.work.common.dto.DateAndDepartmentId;
 import com.work.work.Work;
-import com.work.work.mapper.WorkMapper;
 
-@Service
-public class WorkService {
+public interface WorkService {
 
-	@Autowired
-	private WorkMapper workMapper;
+	Work startWork(String userId);
 
-	public Work startWork(String userId){
-		Work work = new Work(userId);
-		workMapper.insert(work);
-		return work;
-	}
+	void finishWork(int workingId);
 
-	public void finishWork(int workingId){
-		workMapper.updateEndTime(workingId);
-	}
+	int countLatecomers(DateAndDepartmentId dateAndDepartmentId);
+
+	int countOvertimeWorkers(DateAndDepartmentId dateAndDepartmentId);
+
+	int countNightShifts(DateAndDepartmentId dateAndDepartmentId);
 }

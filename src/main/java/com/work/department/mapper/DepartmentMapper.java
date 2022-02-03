@@ -15,13 +15,13 @@ public interface DepartmentMapper {
 
 	boolean selectExistLower(Long id);
 
-	void delete(Long id);
+	void delete(@Param("departmentId") Long id, @Param("userId") String userId);
 
 	List<Department> selectAll();
 
 	Integer selectDepth(@Param("departmentId") Long departmentId);
 
-
+	void insertHistory(Department department);
 
 }
 

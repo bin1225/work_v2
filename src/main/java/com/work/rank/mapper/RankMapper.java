@@ -14,7 +14,11 @@ public interface RankMapper {
 
 	void updateUser(Rank rank);
 
-	void deleteUser(@Param("userId") String userId, @Param("departmentId") Long departmentId);
+	void deleteUser(Rank rank);
 
 	List<User> selectUsers(@Param("departmentId") Long departmentId);
+
+	void insertHistory(Rank rank);
+
+	Rank selectOne(Long id);
 }

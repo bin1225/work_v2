@@ -12,7 +12,7 @@ public interface RankService {
 
 	void updateUser(Rank rank);
 
-	void deleteUser(String userId, Long departmentId);
+	void deleteUser(Rank rank);
 
 	List<User> getUsersInDepartment(Long departmentId);
 }

@@ -14,32 +14,31 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.work.common.argumentResolver.CommonResolver;
-import com.work.common.interceptor.CommonInterceptor;
+import com.work.common.argumentResolver.UserResolver;
+import com.work.common.interceptor.LoginInterceptor;
 
 @Configuration
 @Import({DbConfiguration.class})
 @PropertySource("classpath:application.properties")
-@ComponentScan({"com.**.controller", "com.**.service","com.work.common.**"})
+@ComponentScan({"com.**.controller", "com.**.service", "com.work.common.**"})
 @EnableWebMvc
 public class ApplicationConfiguration implements WebMvcConfigurer {
 
 	@Autowired
-	private CommonInterceptor commonInterceptor;
+	private LoginInterceptor commonInterceptor;
 
 	@Autowired
-	private CommonResolver commonResolver;
+	private UserResolver commonResolver;
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		converters.add(new MappingJackson2HttpMessageConverter());
 	}
 
-
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(commonInterceptor)
-				.addPathPatterns("/**/*")
+			.addPathPatterns("/**/*")
 			.excludePathPatterns("/user/login");
 	}
 

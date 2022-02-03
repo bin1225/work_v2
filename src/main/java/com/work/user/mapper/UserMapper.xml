@@ -18,6 +18,7 @@
                        SELECT 1
                        FROM manager
                        WHERE user_id = #{userId}
+                         AND available = 'Y'
                    )
     </select>
 

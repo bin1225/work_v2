@@ -3,23 +3,28 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.work.department.mapper.DepartmentMapper">
     <insert id="insert" parameterType="com.work.department.Department" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO department (name, parent_id, available, depth)
-        VALUES (#{name}, #{parentId}, 'Y', #{depth})
+        INSERT INTO department (name, parent_id, available, depth, registration_date_time, create_id, update_id)
+        VALUES (#{name}, #{parentId}, 'Y', #{depth}, now(), #{createId}, #{updateId})
+    </insert>
+
+    <insert id="insertHistory" parameterType="com.work.department.Department">
+        INSERT INTO department_history (department_id, name, parent_id, available, depth, registration_date_time, update_id)
+        VALUES (#{id}, #{name}, #{parentId}, #{available}, #{depth}, now(), #{updateId})
     </insert>
 
     <select id="selectOne" resultType="com.work.department.Department">
-        SELECT (id, name, parent_id)
+        SELECT id, name, parent_id, available, depth, update_id
         FROM department
         WHERE id = #{id}
           AND available = 'Y'
     </select>
 
     <select id="selectExistLower" resultType="boolean">
-        SELECT EXISTS(SELECT 1 FROM department WHERE parent_id = #{id})
+        SELECT EXISTS(SELECT 1 FROM department WHERE parent_id = #{id} AND available = 'Y')
     </select>
 
     <select id="selectAll" resultType="com.work.department.Department">
-        SELECT (id, name, parent_id)
+        SELECT id, name, parent_id
         FROM department
         WHERE available = 'Y'
     </select>
@@ -48,7 +53,9 @@
 
     <update id="delete" keyProperty="available">
         UPDATE department
-        SET available = 'N'
-        WHERE id = #{id}
+        SET available              = 'N',
+            registration_date_time = now(),
+            update_id              = #{userId}
+        WHERE id = #{departmentId}
     </update>
 </mapper>

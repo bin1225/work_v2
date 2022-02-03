@@ -3,12 +3,12 @@
 <configuration>
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d %5p %c{2} - %m%n</pattern>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level [%logger] - %replace(%msg){'[\r\n]+', ''} %n</Pattern>
         </encoder>
     </appender>
     <root level="INFO">
-        <appender-ref ref="stdout" />
+        <appender-ref ref="stdout"/>
     </root>
+    <logger name="org.springframework.jdbc" level="DEBUG"/>
 
-    <logger name="org.springframework.jdbc" level="DEBUG" />
 </configuration>

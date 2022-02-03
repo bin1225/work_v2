@@ -5,14 +5,15 @@ import com.work.department.Department;
 
 public interface DepartmentService {
 
-	Long createDepartment(Department department);
+	void createDepartment(Department department);
 
 	boolean checkLowerExists(Long id);
 
 	Department findDepartment(Long id);
 
-	void removeDepartment(Long id);
+	void removeDepartment(Long id, String userId);
 
+	void checkManager(String userId);
 
 	Department getAllDepartmentsTree();
 

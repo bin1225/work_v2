@@ -1,6 +1,9 @@
 package com.work.work;
 
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -9,11 +12,14 @@ public class Work {
 
 	private int id;
 	private String userId;
-	private LocalDateTime start;
-	private LocalDateTime end;
+
+	private String dateStart;
+	private String dateFinish;
+	private Time timeStart;
+	private Time timeFinish;
+
 
 	public Work(String userId) {
 		this.userId = userId;
-		this.start = LocalDateTime.now();
 	}
 }

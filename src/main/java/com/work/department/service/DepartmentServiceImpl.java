@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.work.department.Department;
 import com.work.department.mapper.DepartmentMapper;
+import com.work.user.mapper.UserMapper;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -18,15 +19,20 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Autowired
 	private DepartmentMapper departmentMapper;
 
+	@Autowired
+	private UserMapper userMapper;
+
 	@Transactional
-	public Long createDepartment(Department department) throws IllegalArgumentException {
-		int depth = selectDepth(department.getParentId())+1;
+	public void createDepartment(Department department){
+		int depth = getDepth(department.getParentId()) + 1;
 		if (depth > 4) {
-			throw new IllegalArgumentException("depth가 4보다 큽니다.");
+			throw new IllegalArgumentException("depth is bigger than 4 -> current depth : " + depth);
 		}
 		department.setDepth(depth);
+
 		departmentMapper.insert(department);
-		return department.getId();
+		Department findOne = departmentMapper.selectOne(department.getId());
+		departmentMapper.insertHistory(findOne);
 	}
 
 	public boolean checkLowerExists(Long id) {
@@ -37,19 +43,32 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return departmentMapper.selectOne(id);
 	}
 
-	@Transactional
-	public void removeDepartment(Long id) throws IllegalArgumentException {
-		if (checkLowerExists(id)) {
-			throw new IllegalArgumentException();
+	public void checkManager(String userId) {
+		if (!userMapper.checkIsManager(userId)) {
+			throw new IllegalStateException(userId + "is Not Manager");
 		}
-		departmentMapper.delete(id);
 	}
 
-	public int selectDepth(Long id) {
+
+	@Transactional
+	public void removeDepartment(Long id, String userId) {
+		if (checkLowerExists(id)) {
+			throw new IllegalArgumentException("Lower departments are exist");
+		}
+		Department findOne = departmentMapper.selectOne(id);
+		findOne.setAvailable("N");
+		findOne.setUpdateId(userId);
+
+		departmentMapper.delete(id,userId);
+		departmentMapper.insertHistory(findOne);
+	}
+
+	public int getDepth(Long id) {
 		return departmentMapper.selectDepth(id);
 	}
 
 	public Department getAllDepartmentsTree() {
+
 		Map<Long, Department> departmentMap = departmentMapper.selectAll()
 			.stream()
 			.collect(Collectors.toMap(Department::getId, Function.identity()));
